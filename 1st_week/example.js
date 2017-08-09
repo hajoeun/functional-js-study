@@ -28,6 +28,7 @@ var products = [
   }
 ];
 
+
 //1. 모든 수량
 var tq = function(products) {
   return _reduce(products, function(tq, product) {
