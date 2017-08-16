@@ -74,14 +74,18 @@ function _go(seed) {
   }, seed)
 }
 
+function _pipe() {
+  var fns = slice.call(arguments);
+  return function(seed) {
+    return _go.apply(null, [seed].concat(fns));
+  }
+}
+
 function _curryr(func) {
   return function(a, b) {
-    if (arguments.length == 1) 
-      return function(b) {
-        return func(b, a);
-      }
-    else 
-      return func(a, b);
+    return !b ? function(b) {
+      return func(b, a);
+    } : func(a, b);
   }
 }
 
@@ -90,11 +94,11 @@ function _curryr3(func) {
     if (arguments.length == 1)
       return function(b) {
         return func(b, a);
-      }
+      };
     if (arguments.length == 2) 
       return function(c) {
         return func(c, a, b);
-      }
+      };
     return func(a, b, c);
   }
 }

@@ -38,12 +38,13 @@ var tq = function(products) {
   }, 0)
 };
 console.log(tq(products)); // 15
+_go(products, tq, console.log);
 
 //2. 선택 된 총 수량
 _go(products,
   _filter(function(product) { return product.is_selected; }),
   tq,
-  console.log) // 11
+  console.log); // 11
 
 //3. 모든 가격
 var tp = function(products) {
@@ -59,4 +60,7 @@ console.log(tp(products)); // 64000
 _go(products,
   _filter(function(product) { return product.is_selected; }),
   tp,
-  console.log) // 23000
+  console.log); // 23000
+
+
+
