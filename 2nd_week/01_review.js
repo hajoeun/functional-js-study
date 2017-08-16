@@ -25,8 +25,9 @@ var products = [
     name: "후드티",
     price: 21000,
     sizes: [
-      { name: "L", quantity: 3, price: -1000 },
-      { name: "2XL", quantity: 1, price: 2000 },
+      { name: "L", quantity: 0, price: 0 },
+      { name: "XL", quantity: 5, price: 1000 },
+      { name: "2XL", quantity: 10, price: 2000 }
     ]
   },
   {
@@ -51,8 +52,9 @@ var products = [
     name: "기모맨투맨",
     price: 21000,
     sizes: [
-      { name: "M", quantity: 1, price: 0 },
-      { name: "L", quantity: 4, price: 0 }
+      { name: "M", quantity: 0, price: 0 },
+      { name: "L", quantity: 0, price: 0 },
+      { name: "XL", quantity: 0, price: 2000 }
     ]
   }
 ];
@@ -77,6 +79,6 @@ console.log(grouped_products);
 var hood_product_total_price;
 console.log(hood_product_total_price);
 
-// 6) 가격이 20000원대인 제품 중에서 특정 사이즈의 수량이 4개 이상인 제품 찾기
+// 6) 가격이 2만원대인 제품 중에서 재고가 있는 제품 찾기
 var special_product;
 console.log(special_product);

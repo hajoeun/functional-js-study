@@ -1,6 +1,6 @@
 var sum = function(a, b) { 
   return a + b; 
-}
+};
 
 // 객체 지향 스타일 커링
 Function.prototype.curry = function(a) { 
@@ -8,7 +8,7 @@ Function.prototype.curry = function(a) {
   return function(b) { 
     return that(a, b); 
   }; 
-}
+};
 
 // var o_sum15 = sum.curry(15), o_sum10 = sum.curry(10);
 // console.log(o_sum15(10), o_sum10(5));
