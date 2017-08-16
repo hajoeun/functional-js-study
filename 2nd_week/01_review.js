@@ -7,7 +7,7 @@ var products = [
     sizes: [ 
       { name: "L", quantity: 2, price: 0 },
       { name: "XL", quantity: 3, price: 0 },
-      { name: "2XL", quantity: 2, price: 2000 },
+      { name: "2XL", quantity: 2, price: 2000 }
     ]
   },
   {
@@ -17,7 +17,7 @@ var products = [
     sizes: [ 
       { name: "L", quantity: 2, price: 0 },
       { name: "XL", quantity: 3, price: 1000 },
-      { name: "2XL", quantity: 2, price: 2000 }, 
+      { name: "2XL", quantity: 2, price: 2000 }
     ]
   },
   {
@@ -44,7 +44,7 @@ var products = [
     price: 26000,
     sizes: [
       { name: "L", quantity: 3, price: -1000 },
-      { name: "2XL", quantity: 4, price: 2000 },
+      { name: "2XL", quantity: 4, price: 2000 }
     ]
   },
   {
