@@ -1,3 +1,4 @@
+// 이전 시간 예제 한번 더 (go 사용)
 var products = [
   {
     is_selected: true, // <--- 장바구니에서 체크 박스 선택

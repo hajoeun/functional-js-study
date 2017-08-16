@@ -39,6 +39,19 @@ function _filter(list, iter) {
   return res;
 }
 
+function _find(list, iter) {
+  if (Array.isArray(list)) {
+    for (var i = 0, len = list.length; i < len; i++) 
+      if (iter(list[i], i, list)) 
+        return list[i];
+  } else {
+    var keys = Object.keys(list);
+    for (var i = 0, len = keys.length; i < len; i++) 
+      if (iter(list[keys[i]], keys[i], list)) 
+        return list[keys[i]];
+  }
+}
+
 function _reduce(list, iter, memo) {
   var i = 0;
   if (Array.isArray(list)) {
@@ -89,4 +102,5 @@ function _curryr3(func) {
 _each = _curryr(_each);
 _map = _curryr(_map);
 _filter = _curryr(_filter);
+_find = _curryr(_find);
 _reduce = _curryr3(_reduce);
