@@ -44,7 +44,7 @@ function divide(a, b) {
 }
 
 var divided_by_8 = _curryr(divide)(8);
-console.log(divided_by_8(16))
+console.log(divided_by_8(16));
 
 function __map(list, iter) {
   var res = [];
