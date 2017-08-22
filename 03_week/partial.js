@@ -788,13 +788,20 @@
     if (arguments.length == 1) return _(f, _, v);
     return _.is_array(v) ? _.map(v, iter) : iter(v);
   };
-  _.sum = _.pipe(
-    _.map,
-    function(list) {
-      var i = 0, result = list[0], len = list.length;
-      while (++i < len) result += list[i];
-      return result;
-    });
+
+  _.sum = function f(data) {
+    if (_.is_function(data)) return _(f, ___, data);
+    if (!_.is_function(arguments[arguments.length-1])) arguments[arguments.length++] = _.idtt;
+    return _.go(_.to_mr(arguments),
+      _.map,
+      function(list) {
+        if (!list.length) return;
+        var i = 0, result = list[0], len = list.length;
+        while (++i < len) result += list[i];
+        return result;
+      });
+  };
+
   var _reduce_async = function f(data, iter, keys, mp, i) {
     return _.go(mp, function(memo) {
       var key = keys ? keys[i] : i;
