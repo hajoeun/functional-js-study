@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="window.functions.js"></script>
+    <script src="partial.js"></script>
+    <script src="don.js"></script>
+    <script src="jquery.js"></script>
+    <script src="app.js"></script>
+    <script type="module">
+        import { _each, _map, _filter, _reduce, _find, _go, _curryr, _pipe, _curryr3 } from '../libs';
+        window.onload = () => {
+            var users = [
+                { id: 1, name: 'ID', age: 36 },
+                { id: 2, name: 'BJ', age: 32 },
+                { id: 3, name: 'JM', age: 34 },
+                { id: 4, name: 'PJ', age: 27 },
+                { id: 5, name: 'HA', age: 25 },
+                { id: 6, name: 'JE', age: 26 },
+                { id: 7, name: 'JI', age: 31 },
+                { id: 8, name: 'MP', age: 23 }
+            ];
+
+
+            // 1. 30세 미만의 유저의 이름 목록
+            const getUnder30 =  _curryr(_filter)(record => record.age < 30);
+            const getNames = _curryr(_map)(record => record.name);
+            const getUsers = _pipe(getUnder30, getNames);
+            console.log('30세 미만의 유저의 이름 목록', getUsers(users));
+
+
+            // 2. 30세 이상의 유저의 id 목록
+            const getOver30 =  _curryr(_filter)(record => record.age >= 30);
+            const getIds = _curryr(_map)(record => record.id);
+            const getUserIds = _pipe(getOver30, getIds);
+            console.log('30세 이상의 유저의 id 목록', getUserIds(users));
+
+
+            // 3. 30세 미만의 유저들의 나이의 총합
+            const agesum = _reduce(getUnder30(users), (sum, user) => {
+                return sum + user.age
+            },0);
+            console.log('30세 미만의 유저들의 나이의 총합', agesum);
+
+
+            // 4. 이름이 'PJ'인 유저의 나이
+            const getPj = _curryr(_find)(record => record.name === 'PJ');
+            console.log('이름이 \'PJ\'인 유저의 나이', getPj(users)['age']);
+
+
+            // 5. n빵 함수 : curryr을 사용
+            const nppang = _curryr((a, b) => a / b);
+            console.log('n빵 함수', nppang(8)(10000));
+        };
+    </script>
+</head>
+<body>
+
+</body>
+</html>
