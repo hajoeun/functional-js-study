@@ -790,20 +790,21 @@
   };
 
   _.sum = function f(data) {
-    if (_.is_function(data) || typeof data == 'string') return _(f, ___, data);
-    var sep = arguments[arguments.length-1];
-    if (!_.is_function(sep = typeof sep == 'string' ? sep : null))
-      arguments[sep ? arguments.length -1 : arguments.length++] = _.idtt;
-
+    if (_.is_function(data)) return _(f, ___, data);
+    if (!_.is_function(arguments[arguments.length-1])) arguments[arguments.length++] = _.idtt;
     return _.go(_.to_mr(arguments),
       _.map,
       function(list) {
         if (!list.length) return;
         var i = 0, result = list[0], len = list.length;
-        if (sep) while (++i < len) result += (sep + list[i]);
-        else while (++i < len) result += list[i];
+        while (++i < len) result += list[i];
         return result;
       });
+  };
+
+  _.join = function f(arr, sep) {
+    return (arguments.length == 0 || typeof arr == "string") ?
+      _(f, _, arr) : (_.isArray(arr) ? arr : _.values(arr)).join(sep);
   };
 
   var _reduce_async = function f(data, iter, keys, mp, i) {

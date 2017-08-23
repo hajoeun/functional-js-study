@@ -28,7 +28,7 @@
 // // don.js
 // _.go(D('[type="checkbox"]'),
 //   _.pluck('id'),
-//   _.sum(','),
+//   _.join(),
 //   _.log
 // );
 
