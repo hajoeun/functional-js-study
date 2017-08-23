@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>firstTest</title>
+  <script type="module">
+    import { products } from '../products.js';
+    import { _map, _filter, _each, _reduce } from '../libs';
+
+    class Calc {
+	    constructor(products) {
+		    this.products = products;
+	    }
+
+	    getProducts(predict) {
+	    	let records = this.products;
+	    	if (predict) {
+			    records = _filter(this.products, predict);
+        }
+        return records;
+      }
+
+      getProperties(records, propName) {
+	    	return _map(records, record => record[propName]);
+      }
+
+      getFlattenArray(records) {
+	      return [].concat.apply([], records);;
+      }
+
+	    get sizes() {
+        const sizes = this.getProperties(this.getProducts(), 'sizes');
+        return this.getFlattenArray(sizes);
+	    }
+
+	    get quantities() {
+		    const quantities = this.getProperties(this.sizes, 'quantity');
+		    return quantities;
+	    }
+
+	    get selectedProducts() {
+		    const selectedProducts = this.getProducts(product => product.is_selected);
+		    return selectedProducts;
+	    }
+
+	    get selectedSizes() {
+		    const selectedSizes = this.getProperties(this.selectedProducts, 'sizes');
+		    return this.getFlattenArray(selectedSizes);
+	    }
+
+	    get selectedQuantities() {
+		    const selectedQuantities = this.getProperties(this.selectedSizes, 'quantity');
+		    return selectedQuantities;
+	    }
+
+	    get totalQuantity() {
+		    return _reduce(this.quantities, (sum, value) => sum + value, 0);
+	    }
+
+	    get selectedTotalQuantity() {
+		    return _reduce(this.selectedQuantities, (sum, value) => sum + value, 0);
+	    }
+    }
+
+    const calc = new Calc(products);
+    console.log(`totalQuantity : ${calc.totalQuantity}`);
+    console.log(`selectedTotalQuantity : ${calc.selectedTotalQuantity}`);
+  </script>
+</head>
+<body>
+
+</body>
+</html>
