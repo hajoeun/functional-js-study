@@ -56,8 +56,8 @@
   function _keys(obj) { return _is_object(obj) ? Object.keys(obj) : []; }
   function _idtt(val) { return val; }
 
-  _each = function f(data, iter) {
-    if (!iter) return function(data2) { return f(data2, data) };
+  function _each(data, iter) {
+    if (!iter) return function(data2) { return _each(data2, data) };
     var i = -1, len = data && data.length, keys = typeof len == 'number' ? null : _keys(data);
     if (keys && (len = keys.length))
       while (++i < len) iter(data[keys[i]]);
@@ -65,7 +65,6 @@
       while (++i < len) iter(data[i]);
     return data;
   }
-
   function _each2(obj, iter) {
     for (var i = 0, keys = _keys(obj), len = keys.length; i < len; i++) iter(obj[keys[i]], keys[i]);
     return obj;
@@ -258,24 +257,6 @@
       if (parent_els == null) return;
       return $.find(parent_els, selector)[0];
     };
-    // $.find = function f(parent_els, selector) {
-    //   if (arguments.length == 1 && (typeof parent_els == 'string')) return _(f, _, parent_els);
-    //   if (parent_els == null) return;
-    //   if (!_like_arr(parent_els)) parent_els = [parent_els];
-    //   var p_els_len = _length(parent_els),
-    //     selector_is_string = typeof selector == 'string',
-    //     selector_split = selector_is_string && selector.split(','),
-    //     selector_func = !selector_is_string || !_find(selector_split, function(sel) { return combinator_expr.test(sel); })
-    //       ? function(root) {
-    //         return _$(selector, root, selector_is_string);
-    //       } : function(root) {
-    //         return make_string_selector(selector_split, root);
-    //       };
-    //   for (var i = 0, results = []; i < p_els_len; i++)
-    //     for (var j = 0, els = selector_func(define_root(parent_els[i])), els_len = els.length, el; j < els_len; j++)
-    //       if ((el = els[j]) && results.indexOf(el) == -1) results.push(el);
-    //   return results;
-    // };
     $.has = function f(els, selector) {
       if (arguments.length == 1) return _(f, _, els);
       if (els == null) return;
@@ -403,9 +384,9 @@
     }
 
     window.D = $;
-    window.$ = $;
+    window.$ = D;
     window.D1 = $1;
-    window.$1 = $1;
+    window.$1 = D1;
 
     function $(selector) {
       return _$(selector, doc);
@@ -420,7 +401,7 @@
   }();
 
   // don.manipulation.js
-  !function($) {
+  !function() {
     function _is_win(obj) { return obj != null && obj == obj.window; }
     function _is_win_el_or_els(els) { return _is_win(els) || _is_win(els[0]) }
     function _get_win(els) { return _is_win_el_or_els(els) ? window : _check_doc(els) ? window : false; }
@@ -972,9 +953,7 @@
   }(D);
 
   // don.event_n_fetch.js, inspired by https://github.com/oneuijs/oui-dom-events/blob/master/build/index.js
-  !function() {
-    var $ = D;
-
+  !function($) {
     var handlers = {};
     var specialEvents = {};
     specialEvents.click = specialEvents.mousedown = specialEvents.mouseup = specialEvents.mousemove = 'MouseEvents';
@@ -1087,9 +1066,9 @@
       handler.delegated = !!delegator;
       handler.delegator = once ? delegator ? function(e) {
         proxy(e);
-        e.$delegate_called && D.off(el, event, selector, callback);
+        e.$delegate_called && $.off(el, event, selector, callback);
       } : function(e) {
-        D.off(el, event, callback);
+        $.off(el, event, callback);
         proxy(e);
       } : proxy;
 
@@ -1165,7 +1144,7 @@
       }
     }
 
-    D.on = function on(el, eventType, cb_or_sel, callback2) {
+    $.on = function on(el, eventType, cb_or_sel, callback2) {
       if (el == null) return;
       if (arguments.length == 2) return _(on, _, el, eventType);
       if (arguments.length == 3) return _is_str(el) ?
@@ -1174,7 +1153,7 @@
       return bindEvent(el, cb_or_sel, eventType, callback2, delegator(el, cb_or_sel, callback2, parse(eventType).e in hover));
     };
 
-    D.off = function off(el, eventType, callback, callback2) {
+    $.off = function off(el, eventType, callback, callback2) {
       if (el == null) return;
       if (_is_str(el)) return arguments.length == 2 ? _(off, _, el, eventType) : _(off, _, el, eventType, callback);
 
@@ -1183,7 +1162,7 @@
         removeEvent(el, eventType, null, callback);
     };
 
-    D.one = D.once = function once(el, eventType, cb_or_sel, callback2) {
+    $.one = $.once = function once(el, eventType, cb_or_sel, callback2) {
       if (el == null) return;
       if (arguments.length == 2) return _(once, _, el, eventType);
       if (arguments.length == 3) return _is_str(el) ?
@@ -1193,7 +1172,7 @@
       return bindEvent(el, cb_or_sel, eventType, callback2, delegator(el, cb_or_sel, callback2, parse(eventType).e in hover), true);
     };
 
-    D.trigger = function trigger(el, eventType, props) {
+    $.trigger = function trigger(el, eventType, props) {
       if (el == null) return;
       if (arguments.length == 1) return _(trigger, _, el);
 
@@ -1207,7 +1186,6 @@
       el.dispatchEvent(e);
       if (!e.isDefaultPrevented() && e.type == 'submit') el.submit();
     }
-
     function makeEvent(eventType, props) {
       var event = doc.createEvent(specialEvents[eventType] || 'Events');
       var bubbles = true;
@@ -1215,16 +1193,9 @@
       event.initEvent(eventType, bubbles, true);
       return compatible(event);
     }
-
-    /*D.submit = function(el) {
-     if (el == null) return;
-     triggerHandler(el, makeEvent('submit'));
-     };*/
-
     function fetch_to_json(fetched) {
       return fetched.then(function(res) { return res.json() });
     }
-
     function ajax_method(method, url, data) {
       return fetch_to_json(fetch(url, {
         method: method,
@@ -1233,17 +1204,16 @@
         credentials: 'same-origin'
       }));
     }
-    D.get = function(url, query_obj) {
-      return fetch_to_json(fetch(append_query(url, D.param(query_obj)), {
+    $.get = function(url, query_obj) {
+      return fetch_to_json(fetch(append_query(url, $.param(query_obj)), {
         headers: { "Content-Type": "application/json" },
         credentials: 'same-origin'
       }));
     };
-    D.post = _(ajax_method, 'POST');
-    D.put = _(ajax_method, 'PUT');
-    D.del = _(ajax_method, 'DEL');
-
-    D.upload = function(input_or_form, opt) {
+    $.post = _(ajax_method, 'POST');
+    $.put = _(ajax_method, 'PUT');
+    $.del = _(ajax_method, 'DEL');
+    $.upload = function(input_or_form, opt) {
       return new Promise(function(resolve) {
         if (input_or_form == null) return;
         if (input_or_form.nodeName == 'INPUT') {
@@ -1254,11 +1224,11 @@
           var formData = new FormData(input_or_form);
         }
         var is_multiple = input_or_form.multiple;
-        var input_or_form2 = D.el(input_or_form.outerHTML);
-        D.before(input_or_form, input_or_form2);
-        D.remove(input_or_form);
+        var input_or_form2 = $.el(input_or_form.outerHTML);
+        $.before(input_or_form, input_or_form2);
+        $.remove(input_or_form);
 
-        var xhr = new XMLHttpRequest(), url = D.UPLOAD_URL || '/api/file';
+        var xhr = new XMLHttpRequest(), url = $.UPLOAD_URL || '/api/file';
         if (opt) {
           _each(opt.data, function(val, key) { formData.append(key, val); });
           url = opt.url || url;
@@ -1279,7 +1249,7 @@
       return query == '' ? url : (url + '&' + query).replace(/[&?]{1,2}/, '?');
     }
 
-    D.param = function(a) {
+    $.param = function(a) {
       if (a == null) return;
       var s = [], rbracket = /\[\]$/,
         isArray = Array.isArray, add = function (k, v) {
@@ -1318,5 +1288,5 @@
 
       return buildParams('', a).join('&').replace(/%20/g, '+');
     };
-  }();
+  }(D);
 }(window);

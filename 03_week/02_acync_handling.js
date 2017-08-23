@@ -1,8 +1,3 @@
-// var _ = require('partial.js');
-
-// import _  from 'partial'
-// require('partial.js');
-
 var post = {
   id: 66,
   title: '함수형 자바스크립트 스터디',

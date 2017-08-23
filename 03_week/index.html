@@ -9,12 +9,33 @@
 <body>
 <ul class="user_list"></ul>
 
+<form method="post" action="">
+  <fieldset>
+    <div>
+      <label for="two">2</label>
+      <input type="checkbox" value="2" id="two" name="number[]">
+    </div>
+    <div>
+      <label for="four">4</label>
+      <input type="checkbox" value="4" id="four" name="number[]">
+    </div>
+    <div>
+      <label for="six">6</label>
+      <input type="checkbox" value="6" id="six" name="number[]">
+    </div>
+    <div>
+      <label for="eight">8</label>
+      <input type="checkbox" value="8" id="eight" name="number[]">
+    </div>
+  </fieldset>
+</form>
+
 <script src="window.functions.js"></script>
 <script src="partial.js"></script>
 <script src="don.js"></script>
 <script src="jquery.js"></script>
 <script src="app.js"></script>
-<!--<script src="01_example.js"></script>-->
+<script src="01_example.js"></script>
 <!--<script src="02_acync_handling.js"></script>-->
 <script src="03_jquery_vs_don.js"></script>
 </body>
@@ -40,6 +61,7 @@
     1. 간단 복습
       - 간단한 문제 풀기
       - 클로저, 엘릭서 코드 비교
+      - curry 함수의 상위 레벨인 부분 적용 함수 partial 소개
 
     2. go, pipe 사용과 경험담
       - go, pipe 함수 사용법
@@ -47,6 +69,10 @@
 
     3. 라이브러리 소개 jQuery의 함수형 대안 'don.js'
       - 기본적인 사용법 소개 (jQuery와 유사성)
+      - don.js가 함수형에 적합한 이유 (jQuery와 차이점)
 
-    4. [option] partial.js의 template 함수 소개
+    4. partial.js의 template 함수 소개
+
+    5. [시간 남으면] partial.js 톺아보기
+
 -->
