@@ -23,10 +23,11 @@
 //     })
 //     .get()
 //     .join());
-
-
+//
+//
 // // don.js
-// _.go(D('[type="checkbox"]'),
+// _.go(
+//   D('[type="checkbox"]'),
 //   _.pluck('id'),
 //   _.join(),
 //   _.log
@@ -48,7 +49,7 @@ var projections = [
 
 
 // // template 함수
-// _.template('$', `
+// _.template$(`
 //   li#{{$.id}}
 //     .user_info#{{$.user_id}}
 //       h4 {{$._.user.name}}
@@ -58,50 +59,37 @@ var projections = [
 //     button 주문취소`);
 
 
-// // don.js
-// _.go(
-//   projections,
-//   _.sum(_.t$(`
-//     li#{{$.id}}
-//       .user_info#{{$.user_id}}
-//         h4 {{$._.user.name}}
-//       ul.products {{_.sum($._.products, `, _.t$(`
-//         li {{$.name}}
-//       `) ,`)}}
-//       button 주문취소
-//       `)),
-//   D.appendTo('.user_list')
-// );
-//
+// don.js
+_.go(
+  projections,
+  _.sum(_.t$(`
+    li#{{$.id}}
+      .user_info#{{$.user_id}}
+        h4 {{$._.user.name}}
+      ul.products {{_.sum($._.products, `, _.t$(`
+        li {{$.name}}
+      `) ,`)}}
+      button 주문취소
+      `)),
+  D.appendTo('.user_list')
+);
+
 // _.go('body',
 //   D,
 //   D.on('click', 'button', __(
 //     _.v('$currentTarget'),
 //     D.parent('li'),
+//     _.hi,
 //     D.hide
 //   ))
 // );
 
+_.go('body',
+  $,
+  body =>
+    $(body).on('click', 'button', __(
+      _.v('currentTarget'),
+      current => $(current).parent().hide()
+  ))
+);
 
-// // jQuery
-// _.go(projections,
-//   _.sum(_.t$(`
-//     li#{{$.id}}
-//       .user_info#{{$.user_id}}
-//         h4 {{$._.user.name}}
-//       ul.products {{_.sum($._.products, `, _.t$(`
-//         li {{$.name}}
-//       `) ,`)}}
-//       button 주문취소
-//       `)),
-//   html => $(html).appendTo('.user_list')
-// );
-//
-// _.go('body',
-//   $,
-//   body =>
-//     $(body).on('click', 'button', __(
-//       _.v('currentTarget'),
-//       current => $(current).parent().hide()
-//   ))
-// );

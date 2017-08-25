@@ -139,4 +139,16 @@
   w._clone = function(obj) {
     return !obj || typeof obj != 'object' ? obj : Array.isArray(obj) ? obj.slice() : _extend({}, obj);
   };
+
+  w._curryr = function(f) {
+    return function(b, a) {
+      return arguments.length == 2 ? f(b, a) : function(a) { return f(a, b) };
+    };
+  };
+  w._lt = w._curryr(function(a, b) { return a < b; });
+  w._lte = w._curryr(function(a, b) { return a <= b; });
+  w._gt = w._curryr(function(a, b) { return a > b; });
+  w._gte = w._curryr(function(a, b) { return a >= b; });
+  w._add = w._curryr(function(a, b) { return a + b; });
+  w._sub = w._curryr(function(a, b) { return a - b; });
 })(typeof global == 'object' ? global : window);
