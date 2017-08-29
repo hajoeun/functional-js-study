@@ -795,7 +795,7 @@
     return _.go(_.to_mr(arguments),
       _.map,
       function(list) {
-        if (!list.length) return;
+        if (!list.length) return list;
         var i = 0, result = list[0], len = list.length;
         while (++i < len) result += list[i];
         return result;

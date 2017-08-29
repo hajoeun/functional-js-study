@@ -539,17 +539,17 @@
       return _like_arr(els) ? _each(els, setter) : setter(els, 0);
     };
 
-    var html_to_or_text_to = function f(els, method) {
-      if (arguments.length == 1) return _(f, _, els);
+    var html_to_or_text_to = function f(content, els, method) {
+      if (!els) return _(f, _, content, method);
       if (_is_str(els)) els = $(els);
-      return _(method, els);
+      return method(els, content);
     };
 
     $.text = _(text_or_html, _, _, function(els) { return els.reduce(function(res, el) { return res + el.textContent; }, '') }, 'textContent');
     $.html = _(text_or_html, _, _, function(els) { return els[0].innerHTML }, 'innerHTML');
 
-    $.textTo = $.text_to = html_to_or_text_to($.text);
-    $.htmlTo = $.html_to = html_to_or_text_to($.html);
+    $.textTo = $.text_to = _(html_to_or_text_to, _, _, $.text);
+    $.htmlTo = $.html_to = _(html_to_or_text_to, _, _, $.html);
 
     function make_insert(type, reverse) {
       function insert(target, elem) {
