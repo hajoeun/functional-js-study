@@ -6,8 +6,23 @@
   padding: 20px;
 }
 
-.filter label {
+label {
   border: 1px solid #cccccc;
   padding: 5px;
   margin: 5px;
+}
+
+.body {
+  display: flex;
+  border: 1px solid #cccccc;
+  margin-top: 20px;
+  padding: 20px 0;
+}
+
+.body > .movie_list {
+  flex: 2;
+}
+
+.body > .extension {
+  flex: 1;
 }
