@@ -55,7 +55,7 @@
 
     _.c('.movie_box'), $,
     $.on('change', '.filter input[type=checkbox]', _.pipe(
-      lo.filtered_movies = () => {
+      () => {
         let ratings = _.go('.rating input:checked', $, $.val),
           genres = _.go('.genre input:checked', $, $.val),
           directors = _.go('.director input:checked', $, $.val);
