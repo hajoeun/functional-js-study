@@ -1,5 +1,13 @@
 !function(lo) {
-  function to_number(str) { return parseInt(str.replace(',', '')) }
+
+  let movie_filter = _.memoize((ratings, genres, directors) =>
+    _.filter(movies, movie => {
+      let r = ratings.length ? _.contains(ratings, movie.movie_rating) : true,
+        g = genres.length ? _.contains(genres, movie.genre) : true,
+        d = directors.length ? _.contains(directors, movie.director) : true;
+      return _.every([r,g,d]);
+    }),
+    (ratings, genres, directors) => ratings.join() + '&&' + genres.join() + '&&' + directors.join());
 
   _.each($('.movie_box'), __(
     _.c(movies),
@@ -46,13 +54,22 @@
 
 
     _.c('.movie_box'), $,
-    $.on('change', '.filter input[type=checkbox]', function() {
+    $.on('change', '.filter input[type=checkbox]', _.pipe(
+      lo.filtered_movies = () => {
+        let ratings = _.go('.rating input:checked', $, $.val),
+          genres = _.go('.genre input:checked', $, $.val),
+          directors = _.go('.director input:checked', $, $.val);
 
-    }),
+        return movie_filter(ratings, genres, directors);
+      },
+      data => lo.current_list = data,
+      lo.items,
+      $.html_to('.movie_list'))),
 
-    $.on('change', '.sort select', function() {
-
-    }),
+    $.on('change', '.sort select', _.pipe(
+      e => _.sort_by(lo.current_list || movies, e.$currentTarget.value),
+      lo.items,
+      $.html_to('.movie_list'))),
 
     $.on('click', '.extension .btn1', function() {
 
