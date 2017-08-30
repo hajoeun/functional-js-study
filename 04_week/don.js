@@ -640,7 +640,7 @@
       if (is_show) {
         function fn(el) {
           if (el.style.display != 'none') {
-            if (el.hidden) el.style.display = get_default_display(el);
+            if (el.hidden || el.ownerDocument.defaultView.getComputedStyle(el, null).display == 'none') el.style.display = get_default_display(el);
             return;
           }
 
