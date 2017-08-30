@@ -1,5 +1,4 @@
-!function(window) {
-  let $ = window.D, $1 = window.D1, lo = {};
+!function(lo) {
   function to_number(str) { return parseInt(str.replace(',', '')) }
 
   _.each($('.movie_box'), __(
@@ -66,4 +65,4 @@
 
   ))
 
-}(window);
+}({});
