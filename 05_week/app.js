@@ -1,15 +1,6 @@
 !function(lo) {
 
-  let movie_filter = _.memoize((ratings, genres, directors) =>
-    _.filter(movies, movie => {
-      let r = ratings.length ? _.contains(ratings, movie.movie_rating) : true,
-        g = genres.length ? _.contains(genres, movie.genre) : true,
-        d = directors.length ? _.contains(directors, movie.director) : true;
-      return _.every([r,g,d]);
-    }),
-    (ratings, genres, directors) => ratings.join() + '&&' + genres.join() + '&&' + directors.join());
-
-  _.each($('.movie_box'), __(
+  _.each(D('.movie_box'), __(
     _.c(movies),
     _.t$(`
       .header
@@ -50,34 +41,59 @@
             .res1
             .res2
     `),
-    $.prepend_to('.movie_box'),
+    D.prepend_to('.movie_box'),
 
 
-    _.c('.movie_box'), $,
-    $.on('change', '.filter input[type=checkbox]', _.pipe(
-      () => {
-        let ratings = _.go('.rating input:checked', $, $.val),
-          genres = _.go('.genre input:checked', $, $.val),
-          directors = _.go('.director input:checked', $, $.val);
+    /*
+      1. 전체 영화 데이터(배열): movies
+      2. 영화 데이터 형태: {
+         attendance: 724747,
+         comment: 206,
+         date: "1997-11-22",
+         director: "류승완",
+         genre: "핑크 영화",
+         id: 0,
+         like: 10,
+         movie_rating: "15세 이상 관람가",
+         name: "편지"
+      }
+      3. 필터링 방법:
+         - 같은 카테고리 내에선 'OR' 조건. (15세 이상 관람가 || 12세 이상 관람가)
+         - 다른 카테고리와는 'AND' 조건. (15세 이상 관람가 && 핑크 영화 && 류승완)
+      4. 정렬 방법:
+         - 이미 필터링된 데이터 중에서 정렬.
+      5. DOM 다루기: jQuery == $ || Don == D || document.querySelector
+    */
 
-        return movie_filter(ratings, genres, directors);
+    _.c('.movie_box'), D,
+    D.on('change', '.filter input[type=checkbox]', __(
+      function(e) {
+        let filtered_data = [];
+
+        return filtered_data;
       },
       data => lo.current_list = data,
       lo.items,
-      $.html_to('.movie_list'))),
+      D.html_to('.movie_list'))),
 
-    $.on('change', '.sort select', _.pipe(
-      e => _.sort_by(lo.current_list || movies, e.$currentTarget.value),
+    D.on('change', '.sort select', __(
+      function(e) {
+        let sorted_data = [];
+
+        return sorted_data;
+      },
       lo.items,
-      $.html_to('.movie_list'))),
+      D.html_to('.movie_list'))),
 
-    $.on('click', '.extension .btn1', function() {
+    D.on('click', '.extension .btn1', __(
+      function(e) {
 
-    }),
+      }, _.log)),
 
-    $.on('click', '.extension .btn2', function() {
+    D.on('click', '.extension .btn2', __(
+      function(e) {
 
-    })
+      }, _.log))
 
 
   ))
