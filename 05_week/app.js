@@ -1,27 +1,26 @@
 !function(lo) {
 
+  lo.criterias = _.reduce(movies, function(obj, movie) {
+    if (!_.contains(obj.ratings, movie.rating)) obj.ratings.push(movie.rating);
+    if (!_.contains(obj.genres, movie.genre)) obj.genres.push(movie.genre);
+    if (!_.contains(obj.directors, movie.director)) obj.directors.push(movie.director);
+    return obj;
+  }, { ratings: [], genres: [], directors: [] });
+
   _.each(D('.movie_box'), __(
-    _.c(movies),
-    _.t$(`
+    _.c([movies, lo.criterias]),
+    _.to_mr,
+    _.t('$, cris', `
       .header
         .title 
           h3 한국 영화 무비 박스
-        .filter
-          .rating
-            label 등급 
-            .inputs {{_.go($, _.map(m => m.movie_rating), _.uniq, _.sum(`, _.t$(`
-              input[type=checkbox name=movie_rating value='{{$}}'] {{$}}
+        .filter {{_.go(cris, `, _.sum(_.t('cri, k', `
+          .{{k}}
+            label {{(k == 'ratings') ? '등급' : (k == 'genres') ? '장르' : '감독'}} 
+            .inputs {{_.go(cri, _.sum(`, _.t$(`
+              input[type=checkbox name=rating value='{{$}}'] {{$}}
             `) ,`))}}
-          .genre
-            label 장르 
-            .inputs {{_.go($, _.map(m => m.genre), _.uniq, _.sum(`, _.t$(`
-              input[type=checkbox name=genre value='{{$}}'] {{$}}
-            `) ,`))}}
-          .director
-            label 감독 
-            .inputs {{_.go($, _.map(m => m.director), _.uniq, _.sum(`, _.t$(`
-              input[type=checkbox name=director value='{{$}}'] {{$}}
-            `) ,`))}}
+        `)) ,`)}}
         .sort
           label 정렬
           select
@@ -31,7 +30,7 @@
             option[value=like] 좋아요
       .body
         ul.movie_list {{_.go($, `, lo.items = _.sum(_.t$(`
-          li.movie_item {{$.name}} | {{$.date}} | {{$.director}} | {{$.genre}} | {{$.movie_rating}} [ {{$.attendance}} | {{$.like}} | {{$.comment}} ]
+          li.movie_item {{$.name}} | {{$.date}} | {{$.director}} | {{$.genre}} | {{$.rating}} [ {{$.attendance}} | {{$.like}} | {{$.comment}} ]
         `)) ,`)}}
         .extension
           .btns
@@ -43,7 +42,6 @@
     `),
     D.prepend_to('.movie_box'),
 
-
     /*
       1. 전체 영화 데이터(배열): movies
       2. 영화 데이터 형태: {
@@ -54,7 +52,7 @@
          genre: "핑크 영화",
          id: 0,
          like: 10,
-         movie_rating: "15세 이상 관람가",
+         rating: "15세 이상 관람가",
          name: "편지"
       }
       3. 필터링 방법:
@@ -87,15 +85,15 @@
 
     D.on('click', '.extension .btn1', __(
       function(e) {
+        let data = lo.current_list || movies;
 
       }, _.log)),
 
     D.on('click', '.extension .btn2', __(
       function(e) {
+        let data = lo.current_list || movies;
 
       }, _.log))
-
-
   ))
 
 }({});
