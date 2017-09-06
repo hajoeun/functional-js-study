@@ -62,18 +62,12 @@
 
         return movie_filter(ratings, genres, directors);
       },
-      // _.c('.filter > *'), $,
-      // _map(__($.find('input:checked'), $.val)),
-      // _.to_mr,
-      // movie_filter,
       data => lo.current_list = data,
       lo.items,
       $.html_to('.movie_list'))),
 
     $.on('change', '.sort select', _.pipe(
       e => _.sort_by(lo.current_list || movies, e.$currentTarget.value),
-      // _.val('$currentTarget'), $.val,
-      // _.partial(_.sort_by, (lo.current_list || movies)),
       lo.items,
       $.html_to('.movie_list'))),
 
