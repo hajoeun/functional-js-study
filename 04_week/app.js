@@ -2,7 +2,7 @@
 
   let movie_filter = _.memoize((ratings, genres, directors) =>
     _.filter(movies, movie => {
-      let r = ratings.length ? _.contains(ratings, movie.movie_rating) : true,
+      let r = ratings.length ? _.contains(ratings, movie.rating) : true,
         g = genres.length ? _.contains(genres, movie.genre) : true,
         d = directors.length ? _.contains(directors, movie.director) : true;
       return _.every([r,g,d]);
@@ -18,8 +18,8 @@
         .filter
           .rating
             label 등급 
-            .inputs {{_.go($, _.map(m => m.movie_rating), _.uniq, _.sum(`, _.t$(`
-              input[type=checkbox name=movie_rating value='{{$}}'] {{$}}
+            .inputs {{_.go($, _.map(m => m.rating), _.uniq, _.sum(`, _.t$(`
+              input[type=checkbox name=rating value='{{$}}'] {{$}}
             `) ,`))}}
           .genre
             label 장르 
@@ -40,7 +40,7 @@
             option[value=like] 좋아요
       .body
         ul.movie_list {{_.go($, `, lo.items = _.sum(_.t$(`
-          li.movie_item {{$.name}} | {{$.date}} | {{$.director}} | {{$.genre}} | {{$.movie_rating}} [ {{$.attendance}} | {{$.like}} | {{$.comment}} ]
+          li.movie_item {{$.name}} | {{$.date}} | {{$.director}} | {{$.genre}} | {{$.rating}} [ {{$.attendance}} | {{$.like}} | {{$.comment}} ]
         `)) ,`)}}
         .extension
           .btns
