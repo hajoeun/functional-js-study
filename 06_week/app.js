@@ -43,11 +43,11 @@
     _.c('.movie_box'), D,
     D.on('change', '.filter input[type=checkbox]', __(
       _.always("input:checked"), D,
-      _.reduce((result, c) => {
-        result[c.name] ? result[c.name].push(c.value) : result[c.name] = [c.value];
-        return result;
-      }, {}),
-      lo.movie_filter = _.memoize(
+      lo.group_by_filter_name = _.reduce((result, c) =>
+        ((result[c.name] ? result[c.name].push(c.value) : result[c.name] = [c.value]), result), {}),
+      checked_map => !_.is_empty(checked_map) ? checked_map :
+        (lo.filter_value_map || (lo.filter_value_map = lo.group_by_filter_name(D('.inputs input')))),
+      _.memoize( // movie_filter
         checked_map =>
           _.filter(movies, m =>
             _.every(_.map(checked_map, (arr, key) => _.contains(arr, m[key])))
@@ -63,8 +63,8 @@
       lo.items,
       D.html_to('.movie_list'))),
 
+    // - 가장 개봉한 영화가 많았던 해의 총 관람객 수
     D.on('click', '.extension .btn1', __(
-      // - 가장 개봉한 영화가 많았던 해의 총 관람객 수
       () =>
         _.go(
           lo.current_list || movies,
@@ -73,15 +73,15 @@
           _.reduce((m, v) => m + v.attendance, 0)),
       _.log)),
 
+    // - 2000년대 개봉한 영화 중 가장 관객수가 적은 영화
     D.on('click', '.extension .btn2', __(
-      // - 2000년대 개봉한 영화 중 가장 관객수가 적은 영화
       function() {
         let data = lo.current_list || movies;
 
       }, _.log)),
 
+    // - 12세 이상 관람가 중에서 김기덕 감독의 영화가 아닌 영화 다섯편
     D.on('click', '.extension .btn3', __(
-      // - 12세 이상 관람가 중에서 김기덕 감독의 영화가 아닌 영화 다섯편
       function() {
         let data = lo.current_list || movies;
 
