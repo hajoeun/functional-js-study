@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="module">
+        import { datas } from './datas.js';
+        import { _each, _map, _filter, _reduce, _find, _go, _curryr, _pipe, _curryr3 } from '../libs';
+
+        // 1) dom에 모든 상품 이름 추가하기 (부수효과를 활용하면 좋음)
+        // reduce를 커링으로 처리하면 좀 더 고도의 기술이 필요하겠다
+        // 인수를 차례대로 조립해 나가는 기술이 필요하다
+        const extraProductNames = _reduce(_map(datas, record => record.name), (sum, n) => {
+	        sum.push(n);
+        	return sum;
+        }, ['에코백']);
+        var dom = ["에코백"];
+        console.log('1', extraProductNames); // ["에코백", "반팔티", "긴팔티", "후드티", "맨투맨", "기모후드티", "기모맨투맨"]
+
+        // 2) 모든 상품 이름 배열 만들기 (커리 활용)
+        const getProductNames = _curryr(_map)(record => record.name);
+        var product_names = getProductNames(datas);
+        console.log('2', product_names); // ["반팔티", "긴팔티", "후드티", "맨투맨", "기모후드티", "기모맨투맨"]
+
+        // 3) 가격이 20000원 미만인 인기 상품 찾기
+        const getPopularProducts = _curryr(_filter)(record => record.is_popular);
+        const getUnder20000Products = _curryr(_filter)(record => record.price < 20000);
+        const getPopluarUnder20000Products = _pipe(getPopularProducts, getUnder20000Products);
+        var popluar_under_20000_products = getPopluarUnder20000Products(datas);
+        console.log('3', popluar_under_20000_products);
+
+        // 4) 가격대별로 분류된 제품 목록 만들기 (groupBy를 구현하는 좋은 방법이 뭐가 있을까..?)
+        const grouped_products = 0;
+        console.log('4', grouped_products);
+
+        // 5) 제품명이 "후드티"인 제품의 가격 총합 (사이즈별 가격 변동 조건 포함)
+        const getHoodies = _curryr(_filter)(record => record.name.includes('후드티'));
+        const getPrices = _curryr(_map)(record => {
+        	const rst = _reduce(record.sizes, (totalPrice, size) => {
+        		totalPrice += (record.price + size.price) * size.quantity;
+		        return totalPrice;
+	        }, 0);
+        	return rst;
+        });
+        const getHoodProductTotalPrice = _pipe(getHoodies, getPrices);
+        var hood_product_total_price = getHoodProductTotalPrice(datas);
+        console.log('5', hood_product_total_price);
+
+        // 6) 가격이 2만원대인 제품 중에서 재고가 있는 제품 찾기
+        const get20000Products = _curryr(_filter)(record => record.price >= 20000 && record.price < 30000);
+        const getSaleNow = _curryr(_filter)(record => {
+	        const soldOut = _find(record.sizes, size => {
+	        	return size.quantity <= 0;
+          });
+	        /*
+           TODO: 이 부분의 구현이 애매하다
+           마이클 포거스가 그랬던 것처럼 존재여부를 반환하는 함수부터 만들어야 이야기가 진행될 수 있다
+	        */
+	        console.log('soldOut', soldOut);
+	        return !!!soldOut;
+        });
+        const getSpecialProduct = _pipe(get20000Products, getSaleNow);
+        var special_product = getSpecialProduct(datas);
+        console.log('6', special_product);
+
+        var origin_special_product = _filter(datas, data => (data.price >= 20000) && (data.price < 30000) && _find(data.sizes, d => d.quantity));
+        console.log('origin_special_product', origin_special_product);
+    </script>
+</head>
+<body>
+
+</body>
+</html>
