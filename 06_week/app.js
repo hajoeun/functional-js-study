@@ -48,10 +48,11 @@
       checked_map => !_.is_empty(checked_map) ? checked_map :
         (lo.filter_value_map || (lo.filter_value_map = lo.group_by_filter_name(D('.inputs input')))),
       _.memoize( // movie_filter
-        checked_map =>
-          _.filter(movies, m =>
-            _.every(_.map(checked_map, (arr, key) => _.contains(arr, m[key])))
-          ),
+        checked_map => {
+          return _.filter(movies, m => {
+            return _.every(_.map(checked_map, (arr, key) => _.contains(arr, m[key])))
+          })
+        },
         checked_map => _.reduce(checked_map, (str, arr, key) => str + arr.join() + key, '')
       ),
       data => lo.current_list = data,
