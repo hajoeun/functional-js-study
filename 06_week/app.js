@@ -1,4 +1,28 @@
+var count = 0;
 !function(lo) {
+  let _memoize01 = function(fn1, fn2) {
+    function f(data) {
+      let key = fn2(data);
+      return f.cache[key] ? f.cache[key] : (f.cache[key] = fn1(data));
+    }
+    f.cache = {};
+    return f;
+  };
+
+  const _memoize = function (runner, keyMaker) {
+    return function memoize(data) {
+      const key = keyMaker(data);
+      memoize.cache = {};
+      if (!_.isEmpty(memoize.cache[key])) {
+        console.log('캐시된 응답');
+        return memoize.cache;
+      } else {
+        console.log('계산된 응답');
+        return memoize.cache[key] = runner(data);
+      }
+    }
+  };
+
   _.each($('.movie_box'), __(
     _.c(movies),
     _.t$(`
@@ -47,7 +71,7 @@
         ((result[c.name] ? result[c.name].push(c.value) : result[c.name] = [c.value]), result), {}),
       checked_map => !_.is_empty(checked_map) ? checked_map :
         (lo.filter_value_map || (lo.filter_value_map = lo.group_by_filter_name(D('.inputs input')))),
-      _.memoize( // movie_filter
+      window.m_filter = _memoize( // movie_filter
         checked_map => {
           return _.filter(movies, m => {
             return _.every(_.map(checked_map, (arr, key) => _.contains(arr, m[key])))
@@ -78,15 +102,35 @@
     D.on('click', '.extension .btn2', __(
       function() {
         let data = lo.current_list || movies;
-
+        return _.go(data,
+          _.Hi("1번:"),
+          _.groupBy(movie => movie.date.split('-')[0]),
+          _.Hi("2번:"),
+          _.pick((movie, key) => Number(key) >= 2000),
+          _.Hi("3번:"),
+          _.values,
+          _.Hi("4번:"),
+          _.flatten,
+          _.Hi("5번:"),
+          _.min( m => m.attendance ),
+        );
       }, _.log)),
 
     // - 12세 이상 관람가 중에서 김기덕 감독의 영화가 아닌 영화 다섯편
     D.on('click', '.extension .btn3', __(
       function() {
         let data = lo.current_list || movies;
-
+        return _.go(data,
+          L.filter(movie => {
+            count++;
+            return movie.rating == '12세 이상 관람가';
+          }),
+          L.reject(movie => {
+            count++;
+            return movie.director == '김기덕';
+          }),
+          L.take(5)
+        );
       }, _.log))
   ))
-
 }({});
