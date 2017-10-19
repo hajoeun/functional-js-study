@@ -30,14 +30,14 @@ var products = [
 
 
 //1. 모든 수량
-var tq = function(products) {
+var sum_total_quantity = function(products) {
   return _reduce(products, function(tq, product) {
     return _reduce(product.sizes, function(tq, size) {
       return tq + size.quantity;
     }, tq);
   }, 0)
 };
-console.log(tq(products)); // 15
+console.log(sum_total_quantity(products)); // 15
 
 //2. 선택 된 총 수량
 console.log(tq(_filter(products, function(product) { return product.is_selected; }))); // 11

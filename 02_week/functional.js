@@ -81,6 +81,14 @@ function _pipe() {
   }
 }
 
+function _curry(fn) {
+  return function(a) {
+    return function(b) {
+      return fn(a, b);
+    }
+  }
+}
+
 function _curryr(func) {
   return function(a, b) {
     return !b ? function(b) {
